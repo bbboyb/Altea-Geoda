@@ -1,0 +1,580 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{AUXILIARES/estiloTFG}[2022/03/20]
+
+
+%:Para gestionar la dimensión de las páginas
+\usepackage{geometry}
+
+
+% Idioma
+	\usepackage[english, spanish, es-tabla, es-nosectiondot, es-noindentfirst, es-nolists, activeacute]{babel} 
+	%% es-tabla Traduce table como tabla en lugar de como cuadro.
+	%% es-nolists No cambia las listas enumerate e itemize.
+	%% es-nosectiondot  No añade punto tras los números de sección, subsección…
+	%% es-ucroman \roman pasa a versales (mayúsculas)
+	%% es-noshorthands  No se activa ninguna abreviación.
+	\spanishdecimal{.}
+	\selectlanguage{spanish} 
+	
+	
+%%% the datetime package para adecuar el formato de fecha
+	\usepackage{datetime}% http://ctan.org/pkg/datetime
+	%\newdateformat{mifecha}{Bilbao, a \THEDAY~de \monthname[\THEMONTH] de \THEYEAR}
+	\newdateformat{monthyeardate}{%
+ 	 %\monthname[3] % 				Si quisieras que apareciera otro mes diferente..
+	 \monthname[\THEMONTH] 
+	 \THEYEAR}
+ 	 %\monthname[\THEMONTH] \THEYEAR}
+	\makeatletter
+	\renewcommand{\monthnamespanish}[1][\month]{%
+  	\@orgargctr=#1\relax
+  	\ifcase\@orgargctr
+    	\PackageError{datetime}{Invalid Month number \the\@orgargctr}{%
+     	 Month numbers should go from 1 to 12}%
+    		\or Enero%
+   	 	\or Febrero%
+    		\or Marzo%
+    		\or Abril%
+    		\or Mayo%
+    		\or Junio%
+    		\or Julio%
+    		\or Agosto%
+    		\or Septiembre%
+    		\or Octubre%
+   		\or Noviembre%
+    		\or Diciembre%
+    	\else \PackageError{datetime}{Invalid Month number \the\@orgargctr}{%
+      	Month numbers should go from 1 to 12}%
+  	\fi}
+	\makeatother
+
+
+%:Un conjunto de macros relacionados con el lenguaje 
+	\addto\captionsspanish
+	{%
+	\def\figurename{Figura}%
+	\def\tablename{Tabla}%
+	\def\listfigurename{{\'I}ndice de Figuras}
+	\def\listtablename{{\'I}ndice de Tablas}
+	\def\lstlistlistingname{{\'I}ndice de C{\'o}digos}
+	\def\glossaryname{Glosario}%
+	\def\contentsname{{\'I}ndice}%
+	}
+	\def\glossaryname{Glosario}
+	\def\chaptername{Cap{\'i}tulo}
+	\def\Prefacename{Prefacio}%
+	\def\refname{Referencias}%
+	\def\abstractname{Resumen}%
+	\def\bibname{Bibliograf{\'i}a}
+	\def\appendixname{Ap\'endice}
+	\def\indexname{{\'I}ndice Alfab\'etico}
+	\def\listprogram{C{\'o}digos}
+	\def\lstlistingname{C{\'o}digos}
+	\def\programname{C{\'o}digo}
+	\def\theoremname{Teorema}
+	\def\lemmaname{Lema}
+	\def\propertyname{Propiedad}
+	\def\corollaryname{Corolario}
+	\def\definitionname{Definici{\'o}n}
+	\def\proofname{Demostraci{\'o}n}
+	\def\examplename{Ejemplo}
+	\def\solutionname{Soluci{\'o}n}
+	\def\summaryname{Resumen}
+	\def\shortcontentsname{{\'I}ndice Abreviado}%
+	\def\notationname{Notaci{\'o}n}%
+
+%:Para  la codificación
+        \usepackage[utf8]{inputenc}	 
+	\usepackage[T1]{fontenc}
+
+%:Paquetes matemáticos, que sobren...... o quitamos?
+	\usepackage{amsmath}
+	\usepackage{mathtools}
+	\usepackage{amssymb}
+	\usepackage{mathptmx}
+	\usepackage{amsfonts}
+	\usepackage{bm}
+	
+	\usepackage[official]{eurosym}
+
+%:Empieza todo lo relacionado con FUENTES
+%: --------------------------              Definición de las fuentes para Latex
+%	https://www.latex-project.org/help/documentation/fntguide.pdf
+%\fontencoding {⟨encoding⟩} 
+%\fontfamily {⟨family⟩}
+%\fontseries {⟨series⟩}
+%\fontshape {⟨shape⟩}
+%\fontsize {⟨size⟩} {⟨baselineskip⟩}
+% \linespread {⟨factor⟩}
+%or 
+%\usefont {⟨encoding⟩} {⟨family⟩} {⟨series⟩} {⟨shape⟩}
+%encoding This specifies the order that characters appear in the font. T1  TEX extended text.
+%family The name for a collection of fonts, usually grouped under a common name by the font foundry. For example, ‘Adobe Times’, ‘ITC Garamond’, and Knuth’s ‘Computer Modern Roman’ are all font families.
+%There are far too many font families to list them all, but some common ones are:
+%cmr Computer Modern Roman cmss Computer Modern Sans
+%cmtt Computer Modern Typewriter
+%cmm Computer Modern Math Italic
+%cmsy Computer Modern Math Symbols cmex Computer Modern Math Extensions
+%ptm Adobe Times
+% phv Adobe Helvetica
+% pcr Adobe Courier
+%series How heavy and/or expanded a font is. For example, ‘medium weight’, ‘narrow’ and ‘bold extended’ are all series. The font series is denoting a combination of the weight (boldness) and the New width (amount of expansion)
+%shape The form of the letters within a font family. For example, ‘italic’, ‘oblique’ and ‘upright’ (sometimes called ‘roman’) are all font shapes.
+%
+%size The design size of the font, for example ‘10pt’. If no dimension is specified, ‘pt’ is assumed.
+%%Each of the commands starting with \font... sets one of the font attributes; New \fontsize also sets \baselineskip. The \linespread command prepares description  to multiply the current (or newly defined) \baselineskip with ⟨factor⟩ (e.g., spreads the lines apart for values greater one).The actual font in use is not altered by these commands, but the current at- tributes are used to determine which font and baseline skip to use after the next \selectfont command.
+
+%:Salvamos el tamaño de la fuente normal por si queremos utilizar dimensiones relativas
+\newdimen\sizenormal
+\newdimen\sizebnormal
+
+\makeatletter
+	\sizenormal=\f@size pt
+	\sizebnormal=\f@baselineskip
+\makeatother
+
+
+
+%\renewcommand{\sfdefault}{phv} 
+
+% Colección de tipos 
+	\newcommand{\helveticam}{\usefont{T1}{phv}{m}{n}\selectfont }
+	\newcommand{\helveticab}{\usefont{T1}{phv}{b}{n}\selectfont }
+	\newcommand{\helveticai}{\usefont{T1}{phv}{m}{it}\selectfont }
+	\newcommand{\helveticax}{\usefont{T1}{phv}{b}{it}\selectfont }
+
+	\newcommand{\titular}{\usefont{T1}{phv}{bc}{n}\selectfont }
+	\newcommand{\titulari}{\usefont{T1}{phv}{bc}{it}\selectfont }
+	\newcommand{\titulart}{\usefont{T1}{phv}{bc}{n}\selectfont }
+	
+	\newcommand{\titulartoc}{\usefont{T1}{phv}{mc}{n}\selectfont }
+	\newcommand{\titulartocb}{\usefont{T1}{phv}{bc}{n}\selectfont }
+	\newcommand{\titulartoci}{\usefont{T1}{phv}{mc}{it}\selectfont }
+	
+			%Times
+			\newcommand{\timesm}{\usefont{T1}{ptm}{m}{n}\selectfont }
+			\newcommand{\timesb}{\usefont{T1}{ptm}{b}{n}\selectfont }
+			\newcommand{\timesi}{\usefont{T1}{ptm}{m}{it}\selectfont }
+			\newcommand{\timesx}{\usefont{T1}{ptm}{b}{it}\selectfont }
+	
+% Les damos un tamaño
+
+\newcommand{\titulofont}{\fontsize{20}{20}\helveticab}			%Título
+\newcommand{\subtitulofont}{\fontsize{19}{19}\helveticam}		%Subtítulo
+\newcommand{\inglestitlefont}{\fontsize{19}{19}\helveticam}		%Título ingles
+\newcommand{\autorfont}{\fontsize{14}{14}\helveticam}			%Autor
+\newcommand{\trabajofont}{\fontsize{9}{9}\helveticab}			%Trabajo
+\newcommand{\facultadfont}{\fontsize{16}{16}\helveticai}			%Facultad
+\newcommand{\afiliafont}{\fontsize{9}{9}\helveticam}			%Afiliación
+\newcommand{\editionfont}{\fontsize{14}{14}\helveticab}			%Editorial
+\newcommand{\locfont}{\fontsize{19}{19}\helveticai}		%Lugar
+\newcommand{\gradofont}{\fontsize{17}{17}\helveticab}		%Lugar
+\newcommand{\letrafont}{\fontsize{12}{12}\helveticam}		%Lugar
+\newcommand{\letrafontdiez}{\fontsize{10}{10}\helveticam}		%Lugar
+
+\newcommand{\reffont}{\normalfont }						% Para las referencias
+
+\newcommand{\letrafonttimesdiez}{\fontsize{10}{10}\timesm}		%Times
+
+
+
+%:Comandos para las diferentes partes del texto
+\newcommand{\achaptext}{\fontsize{20}{20} \titular}			% Para el texto de los capítulos
+\newcommand{\achapnum}{\fontsize{20}{20} \titular}			% Para el número de los capítulos  
+\newcommand{\parttitlesans}{\fontsize{24}{24} \titular }			% Para las partes
+
+\newcommand{\aheadsecc}{\fontsize{15}{14} \titular}				%Para las secciones
+\newcommand{\aheadsubsecc}{\fontsize{13}{12} \titular}			%Para las subsecciones y demás
+\newcommand{\aheadteoremas}{\fontsize{\sizenormal}{\sizebnormal}\titular}		%Teoremas
+\newcommand{\aheadpruebas}{\fontsize{\sizenormal}{\sizebnormal}\titulari}			% Demostraciones
+
+\newcommand{\rhfont}{\fontsize{\sizenormal}{\sizebnormal}\titular}				%Cabeceras de páginas
+\newcommand{\rhpagefont}{\fontsize{9}{9}\titular}				%Números de páginas
+
+\newcommand{\tocpart}{\fontsize{12}{12}\titulartocb}					% Para el TOC
+\newcommand{\tocchap}{\fontsize{12}{12}\titulartocb}				% Para el TOC chap
+\newcommand{\tocschap}{\fontsize{12}{12}\titulartocb}
+\newcommand{\tocsecc}{\fontsize{12}{20}\titulartoc}
+\newcommand{\tocsubsecc}{\fontsize{12}{12}\titulartoc}
+
+
+\usepackage{textcomp}
+%\normalfont
+
+%:Se acaba todo lo relacionado con  las FUENTES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%:BLOQUE 3 TOC . Tiene que estar antes de hyperref para evitar problemas
+\setcounter{tocdepth}{3}	% El nivel hasta el que se muestra el índice, comienza en 0
+%:Fin  definiciones del TOC
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%:BLOQUE 04 Páginas, cabeceras de páginas y estilos de los elementos:capítulo, subcapítulo, sección, etc.
+%:Cabeceras y estilos de páginas
+\usepackage[noindentafter, pagestyles, extramarks, explicit]{titlesec}
+  
+\newlength{\plusheadl}
+\newlength{\plusheadr}
+\widenhead[\plusheadl][0pt]{0pt}{\plusheadr}
+
+% Cómo hay que poner los números de las páginas
+\newcommand{\numpagpar}{\makebox[\plusheadl][l]{\rhpagefont \thepage}}
+\newcommand{\numpagodd}{\makebox[\plusheadr][r]{\rhpagefont \thepage}}
+
+%:Definiendo la regla de la cabecera de las páginas normales
+\makeatletter
+	\newcommand\lineaencabezado{\setesirulehead{0.5\p@}}
+	\newcommand\setesirulehead[1]{%
+  	\ifdim#1=\z@
+    		\let\makeheadrule\@empty
+  	\else
+    		\def\makeheadrule{\color{gray}\rule[-.3\baselineskip]{\linewidth}{#1}}%
+  	\fi}
+\makeatother
+
+%:Estilos de páginas
+% La definición del estilo de páginas es muy simple: \newpagestyle{nombre del estilo}{\comandos generales \sethead[izquierda pág par][centro pág par][derecha pág par]{izquierda pág impar}{centro pág impar}{derecha pág impar}\setfoot[izquierda pág par][centro pág par][derecha pág par]{izquierda pág impar}{centro pág impar}{derecha pág impar}}
+
+\newpagestyle{rdsimolT}
+	{
+	\lineaencabezado
+         \sethead[\numpagpar][\sectiontitle][\thesection]  % páginas pares
+          {\thesection}{\sectiontitle}{\numpagodd} % páginas impares
+	}
+  
+%\newpagestyle{primera}
+%	{
+%	\lineaencabezado \footrule
+%  	\sethead[][][]{\includegraphics[width=2 cm]{logoUS.pdf}}%
+%  				{\raisebox{0.8cm}{\begin{minipage}{0.515\textwidth}
+%				\centering
+%				{\aheadsubsecc \fromtitulacion}\\
+%				\vspace*{.5ex}
+%				{\normalfont \fromasignatura}\\
+%				\vspace*{1ex}
+%				\normalfont \fromconvocatoria \quad \fromfecha
+%				\end{minipage}}
+%				}%
+%				{\includegraphics[width=4 cm]{logoTSC.pdf}
+%				}
+%	\setfoot{}{\rhpagefont Pág. \thepage\, de\, \zpageref{LastPage}}{}
+%  	}
+
+%\newpagestyle{examen}
+%	{
+%	\lineaencabezado
+%	\sethead[\rhpagefont Pág. \thepage\, de\, \zpageref{LastPage}][\aheadsubsecc\fromasignatura][[\rhpagefont\fromfecha]%
+%	{[\rhpagefont\fromfecha}{\aheadsubsecc\fromasignatura}{\rhpagefont Pág. \thepage\, de\, \zpageref{LastPage}}
+%	}
+
+%\newpagestyle{apendice}
+%	{
+%	\lineaencabezado
+%	\sethead[\numpagpar][][\rhfont\appendixname\ \thechapter. \;\chaptertitle]%
+%			{\rhfont\thesection \;\;\sectiontitle}{}{\numpagodd}
+%	}
+
+%\newpagestyle{problema}
+%	{
+%	\lineaencabezado
+%    	\sethead[\numpagpar][][\rhfont\chaptername \; \thechapter. \chaptertitle]% even
+%        		{\rhfont\theproblema \; \problematitle}{}{\numpagodd}% odd
+%    	}
+%	
+%\newpagestyle{Resumen}
+%	{
+%	\lineaencabezado
+%	\sethead[\numpagpar \rhfont\chaptername\ \thechapter. \;\chaptertitle][][]%
+%			{}{}{\rhfont \nombreresumen \numpagodd}
+%	}
+
+%\newpagestyle{especial}
+%	{ 
+%	\lineaencabezado
+%	\sethead[\numpagpar][\rhfont\chaptertitle][] {}{\rhfont\chaptertitle}{\numpagodd}
+%	}
+
+%\newpagestyle{probprop}
+%	{
+%	\lineaencabezado
+%  	\sethead[\numpagpar][\rhfont Problemas Propuestos\;\chaptername \ \thechapter][]%
+%			{}{\rhfont Problemas Propuestos\;\chaptername \ \thechapter}{\numpagodd}
+%  	}
+%
+%\newpagestyle{paginablanco}
+%	{
+%  	\sethead[][][]{}{}{}
+%	    \vspace*{0.2\textheight}
+%    \begin{center}
+%    {\emph{Página en blanco} }
+%    \end{center}
+%	}
+%	
+\renewpagestyle{plain}
+{
+\setfoot[][\rhpagefont\thepage][]{}{\rhpagefont\thepage}{}
+}
+          
+          
+%You can use the titlesec package to customize chapters, sections and subsections style in an easy way.
+%\usepackage{titlesec} (ya esta cargado)
+%:Estilo de capítulos con numeración
+\titleformat
+{\chapter} % command
+[display] % shape
+{\bfseries\Large} % format
+{\colorbox{uccolor}{\parbox[c][2cm][c]{2cm}{\centering\color{white}\fontsize{40}{50}\selectfont\thechapter}} 
+ \  {\color{uccolor!75} \achaptext #1}} % label
+{0.5ex} % sep
+{
+    {\color{uccolor!75}\rule{\textwidth}{3pt}}
+    \vspace{1ex}
+    \centering
+} % before-code
+[
+%\vspace{-10 pt}%
+%{\color{uccolor!75}\rule{\textwidth}{3pt}} \vspace{20pt}
+] % after-code
+%
+%:Estilo de capítulos sin numeración
+\titleformat
+{name=\chapter,numberless} % command
+[display] % shape
+{\bfseries\Large} % format
+{\colorbox{uccolor}{\parbox[c][2cm][c]{2cm}{%\centering\color{white}\fontsize{40}{50}\selectfont\thechapter
+}
+} 
+ \   {\color{uccolor!75} \achaptext #1}} % label
+{0.5ex} % sep
+{
+    {\color{uccolor!75}\rule{\textwidth}{3pt}}
+    \vspace{1ex}
+    \centering
+} % before-code
+[
+%\vspace{-10 pt}%
+%{\color{uccolor!75}\rule{\textwidth}{3pt}} \vspace{20pt}
+] % after-code         
+          
+
+%:Estilo de sección     
+\titleformat{\section}{\aheadsecc}{\thesection}{10 pt}{#1} 
+\titlespacing{\section}{0 pt}{3ex plus .1ex minus .2ex}{3ex plus .1ex minus .2ex}
+
+
+%:Estilo de sección sin numeración     
+\titleformat{name=\section,numberless} {\aheadsecc}{}{0 pt}{#1} 
+\titlespacing{name=\section,numberless}{0 pt}{3ex plus .1ex minus .2ex}{3ex plus .1ex minus .2ex}
+
+%:Estilo de sección sin numeración personal
+\titleclass{\misection}{straight}[\chapter]        
+\titleformat{name=\misection,numberless}{\aheadsecc}{}{0 pt}{#1} 
+\titlespacing{name=\misection,numberless}{0 pt}{3ex plus .1ex minus .2ex}{3ex plus .1ex minus .2ex}
+
+%:Estilo de subsección     
+\titleformat{name=\subsection} {\aheadsubsecc}{\thesubsection}{10 pt}{#1} 
+\titlespacing{name=\subsection}{0 pt}{2ex plus .1ex minus .2ex}{2ex plus .1ex minus .2ex}
+
+%:Estilo de subsección sin numeración     
+\titleformat{name=\subsection,numberless} {\aheadsubsecc}{}{0 pt}{#1} 
+\titlespacing{name=\subsection,numberless}{0 pt}{2ex plus .1ex minus .2ex}{2ex plus .1ex minus .2ex}
+
+%:Estilo de subsubsección     
+\titleformat{name=\subsubsection}{\aheadsubsecc}{\thesubsubsection}{10 pt}{#1} 
+\titlespacing{name=\subsubsection}{0 pt}{1.0ex plus .1ex minus .15ex}{1.0ex plus .1ex minus .15ex}
+
+%:Estilo de subsubsección sin numeración     
+\titleformat{name=\subsubsection,numberless}{\aheadsubsecc}{}{0 pt}{#1} 
+\titlespacing{name=\subsubsection,numberless}{0 pt}{1.0ex plus .1ex minus .15ex}{1.0ex plus .1ex minus .15ex}
+
+%%:Estilo de problema en un libro con capítulos de problemas   
+%\newcounter {problema}[chapter]
+%\makeatletter
+%\renewcommand {\theproblema}{P. \thechapter.\@arabic\c@problema}
+%\makeatother
+%\newcommand{\problemtitle}{}
+%
+%\titleclass{\problema}{straight}[\chapter]  
+%\titleformat{name=\problema}{\aheadsecc}{\theproblema}{10 pt}{#1}[]      
+%\titlespacing{name=\problema}{0 pt}{3ex plus .1ex minus .2ex}{3ex plus .1ex minus .2ex}
+%
+%\makeatletter
+%\let\problemaint\problema
+%\def\problema{\@ifnextchar[\problemaii\problemai}
+%\def\problemai#1{\gdef\problematitle{#1}\problemaint{#1}}
+%\def\problemaii[#1]#2{\gdef\problematitle{#1}\problemaint[#1]{#2}}
+%\makeatother
+
+%:Para que el cambio del tipo de página se gestione con los comandos
+%\makeatletter
+%	\let\problema@without@pagestyle\problema
+%	\def\problema{\pagestyle{problema}\problema@without@pagestyle}
+%\makeatother
+%
+%\makeatletter
+%	\let\section@without@pagestyle\section
+%	\def\section{\pagestyle{rdsimolT}\section@without@pagestyle}
+%\makeatother
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Bibliografía en el indice
+\usepackage{tocbibind}  
+
+
+%Para crear los hiperenlaces
+\usepackage[colorlinks=true, pdfstartview=FitV, linkcolor=uccolor,  citecolor=uccolor, urlcolor=uccolor,linktocpage]{hyperref}
+\hypersetup
+	{
+      bookmarksnumbered=false,
+      bookmarksopen=false,	
+      unicode = true,
+	colorlinks=true,
+	linktoc=all,
+	urlbordercolor=black,
+	plainpages=false,
+	pdfpagemode=UseOutlines,
+	pdfview=FitH,
+	pdfstartview=FitH,
+	linkcolor=refcolor,
+	breaklinks=true,
+	citecolor=refcolor,
+      	anchorcolor=black,
+	urlcolor=refcolor,
+	pdfdisplaydoctitle=true,
+pdftitle={Trabajo Fin de Grado  Facultad de Ciencias},
+pdfsubject={Grado en Física},
+pdfpagemode={},%{Fullscreen},
+pdfview={Fit}, pdfstartview={Fit},
+pdfkeywords={TFG,Faculta de Ciencias}, 
+bookmarksopen={false},
+breaklinks={true}, %permite que un link ocupe más de una linea
+linktocpage={false},%true->en los Índices genera el link a traves del número y no del texto
+pdfnewwindow={true}, % si fuese true nos abriria otra página al seguir el link
+colorlinks={true},
+pdfhighlight={/P},
+urlcolor={uccolor}, linkcolor={uccolor}, citecolor={red},
+baseurl={http://www.unican.es/}
+	}
+	
+\hypersetup{pageanchor=false}
+
+	
+% Para que funcionen los enlaces a webs
+\usepackage{url}
+%:Para romper los url
+% \usepackage{breakurl}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% para trasformar en pgfplots de forma facil entre coordenadas 
+\makeatletter
+
+\newcommand\transformxdimension[1]{%
+  \pgfmathparse{%
+    ((#1/\pgfplots@x@veclength)+\pgfplots@data@scale@trafo@SHIFT@x)/%
+    10^\pgfplots@data@scale@trafo@EXPONENT@x
+  }
+}
+\newcommand\transformydimension[1]{
+\pgfmathparse{((#1/\pgfplots@y@veclength)+\pgfplots@data@scale@trafo@SHIFT@y)/10^\pgfplots@data@scale@trafo@EXPONENT@y}
+}
+
+\makeatother
+%%%%% un poco del tema relacionado con dibujos
+\usepackage{pgf,tikz,pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{graphics}
+
+
+%:Definición de algunos comandos a utilizar en \frontmatter 
+\makeatletter
+\def\dedicatoria#1{
+    \cleardoublepage
+    \thispagestyle{empty}
+    \vspace*{0.2\textheight}
+    \begin{flushright}
+    {\emph{#1}}
+    \end{flushright}
+    \clearpage
+	}
+\makeatother
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%----------------------------------------------------------------------------------------
+
+
+\usepackage{listings}
+\lstset{
+        tabsize=2, % tab = 2 espacios
+        backgroundcolor=\color[HTML]{F0F0F0}, % color de fondo
+        captionpos=b, % posición de pie de código, b=debajo
+        basicstyle=\ttfamily, % estilo de letra general
+        columns=fixed, % columnas alineadas
+        extendedchars=true, % ASCII extendido
+        breaklines=true, % partir líneas
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}}, % marcar final de línea con flecha
+        showtabs=false, % no marcar tabulación
+        showspaces=false, % no marcar espacios
+        keywordstyle=\bfseries\color[HTML]{007020}, % estilo de palabras clave
+        commentstyle=\itshape\color[HTML]{60A0B0}, % estilo de comentarios
+        stringstyle=\color[HTML]{4070A0}, % estilo de strings
+}
+% listings no acepta UTF8, para solucionar esto lo más sencillo es crear un \lstset con la opción literate
+% Listings no acepta UTF8
+%{original}{sustitución}{tamaño}
+\lstset{literate=
+  {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+  {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+  {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+  {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+  {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+  {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+  {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+  {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+  {ã}{{\~a}}1 {ẽ}{{\~e}}1 {ĩ}{{\~i}}1 {õ}{{\~o}}1 {ũ}{{\~u}}1
+  {Ã}{{\~A}}1 {Ẽ}{{\~E}}1 {Ĩ}{{\~I}}1 {Õ}{{\~O}}1 {Ũ}{{\~U}}1
+  {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+  {ű}{{\H{u}}}1 {Ű}{{\H{U}}}1 {ő}{{\H{o}}}1 {Ő}{{\H{O}}}1
+  {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+  {€}{{\euro}}1 {£}{{\pounds}}1 {«}{{\guillemotleft}}1
+  {»}{{\guillemotright}}1 {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {¿}{{?`}}1 {¡}{{!`}}1 
+}
+%Para incluir código inline tenemos el comando \lstinline, muy útil él para hacer referencia a órdenes y variables en el texto:
+%Guardamos el resultado en la variable \lstinline!fib!
+%
+% Código con pie en la parte inferior (por defecto en la superior) y etiqueta
+%\begin{lstlisting}[language=haskell, caption=Código con Listings, captionpos=b, label=lst:fiboHaskell]
+%  -- Fibonacci!
+%  fib = 0 : 1 : zipWith (+) fib (tail fib)
+%\end{lstlisting}
+%\lstinputlisting[language={[latex]tex}, firstline=5, lastline=10]{Codigo/codigo.tex}
+%
+%si queremos, podemos recopilar todos los listados de código flotantes en un índice con el comando \lstlistoflistings, del mismo modo que hacíamos con las tablas y las figuras.
+
+
+%También tenemos la opción de definir diferentes estilos mediante el comando \lstdefinestyle{NOMBRE}{ESTILO} para luego aplicarlos con la opción style
+%\lstdefinestyle{abaqusPython}{
+%        language=python,
+%		% Palabras clave extra
+%        morekeywords={CONTINUOUS,NUMBER,MESH,par,name,ParStudy,
+%		template,define,sample,combine, generate},
+%		% Delimitadores extra, s porque hay uno a cada lado
+%        moredelim=[s][\ttfamily\color{magenta}]{<}{>},
+%}
+%
+%\lstinputlisting[style=abaqusPython]{calculo.py}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
